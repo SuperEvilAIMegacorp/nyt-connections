@@ -71,7 +71,7 @@ def main():
     parser.add_argument('--model', required=True, help='Path to trained model directory')
     parser.add_argument('--test', default='data/global_test.jsonl', help='Path to test data')
     parser.add_argument('--output', required=True, help='Output JSON file path')
-    parser.add_argument('--max-new-tokens', type=int, default=2048, help='Max tokens to generate')
+    parser.add_argument('--max-new-tokens', type=int, default=10000, help='Max tokens to generate')
     parser.add_argument('--gpu', type=int, default=0, help='GPU device ID to use')
     args = parser.parse_args()
 

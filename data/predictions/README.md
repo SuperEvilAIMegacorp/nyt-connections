@@ -4,9 +4,22 @@ This dataset contains model predictions from fine-tuned language models evaluate
 
 ## Dataset Overview
 
-This dataset contains prediction outputs from 11 experimental runs testing different training configurations:
-- **831 NYT Puzzles**: 673 training, 74 validation, 84 test
-- **200 Synthetic Puzzles**: 162 training, 18 validation, 20 test
+This dataset contains prediction outputs from 11 experimental runs testing different training configurations on a shared global validation and test set:
+
+### Evaluation Sets (Shared Across All Experiments)
+- **Validation Set**: 276 entries from 92 unique original puzzles
+  - 88 puzzle IDs with 3 permutations each (84 IDs × 3 = 252 entries)
+  - 4 puzzle IDs containing 2 distinct puzzles with 3 permutations each (4 IDs × 6 = 24 entries)
+  - Sources: 222 NYT + 54 Synthetic puzzles
+
+- **Test Set**: 104 entries from 102 unique original puzzles
+  - 100 puzzles with 1 permutation (100 entries)
+  - 2 puzzles with 2 permutations (4 entries)
+  - All puzzles are NYT puzzles
+
+### Training Sets (Vary by Experiment)
+Training data composition differs across experiments based on augmentation strategy, reasoning format, and curriculum approach. See experiment descriptions below for details.
+
 - **Prediction Files**: 11 JSON files containing model outputs for each experiment
 
 ## File Structure
@@ -69,8 +82,9 @@ Each JSON file contains predictions with metadata for analysis:
 ## Related Resources
 
 - **Training Dataset**: [NYT Connections Experiments Dataset](https://huggingface.co/datasets/nickting/nyt-connections-experiments)
-- **Original NYT Puzzles**: 831 puzzles (673 train, 74 validation, 84 test)
-- **Synthetic Puzzles**: 200 puzzles (162 train, 18 validation, 20 test)
+- **Global Validation Set**: 276 entries (92 unique original puzzles: 222 NYT + 54 Synthetic)
+- **Global Test Set**: 104 entries (102 unique NYT puzzles)
+- **Training Data**: Varies by experiment (see experiment descriptions)
 
 ## Usage
 
