@@ -15,7 +15,8 @@ This codebase investigates fine-tuning strategies for teaching language models t
 │   ├── predictions_test/           # Model predictions on test set
 │   ├── predictions_validation/     # Model predictions on validation set
 │   ├── evaluation_results_*.csv    # Detailed evaluation metrics
-│   └── evaluation_summary_*.csv    # Aggregate performance by model
+│   ├── evaluation_summary_*.csv    # Aggregate performance by model
+│   └── results/                    # Results from validation test for core, reasoning and judge metrics
 │
 ├── data2/                          # Source data (pre-processing)
 │   ├── puzzles/                    # Raw puzzle data (NYT + synthetic + pre-connections)
@@ -28,7 +29,11 @@ This codebase investigates fine-tuning strategies for teaching language models t
 │   ├── evaluate_predictions.py     # Evaluate model predictions and compute metrics
 │   ├── generate_predictions.py     # Generate predictions from trained models
 │   ├── gen_*.py                    # Data generation scripts (reasoning, synthetic puzzles)
-│   └── process_*.py                # Format processing utilities
+│   ├── process_*.py                # Format processing utilities
+│   ├── eval_core_reasoning.py      # Evaluation for core metrics (f1, precision, recall) and reasoning quality (average steps and coverage ratio)
+│   └── eval_judge.py               # Evaluation for Judge 
+│
+│
 │
 ├── models/                         # Saved model checkpoints (exp1_*, exp2_*, exp3_*)
 ├── logs/                           # Training logs
@@ -80,8 +85,16 @@ Contains raw puzzle data and generated reasoning traces **before** experimental 
   - Usage: `python scripts/evaluate_predictions.py --predictions-dir data/predictions_test --output data/evaluation_results_test.csv`
   - Outputs: detailed results CSV, summary CSV, extraction JSON
 
+- **`eval_core_reasoning.py`** - Compute metrics for validation to produce core metrics and reasoning quality
+  - Usage: `python scripts/eval_core_reasoning.py --predictions-dir data/predictions_validation --output data/results/core_and_reasoning` 
+
+- **`eval_judge.py`** - Compute metrics for validation based on judge-based metrics
+  - Usage: `python scripts/eval_judge.py \ --pred-dir data/predictions_validation \ --out-dir data/results/judge_only \ --checkpoint-dir data/results/judge_ckpts`
+
 - **`generate_predictions.py`** - Generate model predictions
   - Usage: `python scripts/generate_predictions.py --model models/exp1_baseline --test-file data/global_test.jsonl`
+
+ 
 
 ### Data Generation (Optional - for reproducing source data)
 - `gen_reason_struct.py` - Generate structured reasoning traces
@@ -101,8 +114,13 @@ python scripts/train_experiment.py --experiment exp1_baseline --epochs 8 --lr 2e
 # 3. Generate predictions
 python scripts/generate_predictions.py --model models/exp1_baseline --test-file data/global_test.jsonl --output data/predictions_test/exp1_baseline.json
 
-# 4. Evaluate predictions
+# 4. Evaluate predictions on test and validation
 python scripts/evaluate_predictions.py --predictions-dir data/predictions_test --output data/evaluation_results_test.csv
+python scripts/eval_core_reasoning.py --predictions-dir data/predictions_validation --output data/results/core_and_reasoning
+python3 scripts/eval_judge.py \          
+  --pred-dir data/predictions_validation \
+  --out-dir data/results/judge_only \
+  --checkpoint-dir data/results/judge_ckpts \
 ```
 
 ## Experiments
